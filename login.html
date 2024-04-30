@@ -1,0 +1,182 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Now</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="shortcut icon" href="images/logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://kit.fontawesome.com/f0fb58e769.js" crossorigin="anonymous"></script>
+<style>
+     #form {
+    opacity: 0;
+    transition: opacity 2s ease;
+  }
+</style>
+  </head>
+<body>
+    <header>
+     <div class="h1">
+        <img src="images/logo.png" alt="">
+     </div>
+     <div class="h2">
+        <ul>
+       <li><a href="index.html">Home</a></li> 
+        <li class="nav-container">
+            <span id="hoverer">About</span> 
+             <ul id="dropdown">
+              <li><a href="about.html">Company Profile</a></li> 
+              <li><a href="staff.html">Our Team</a></li> 
+             </ul>
+            </li>
+       <li class="nav-container">
+        <span id="hoverer">Our Services/Products</span> 
+        <ul id="dropdown">
+            <li><a href="services.html">Our Services</a></li> 
+            <li><a href="Products.html">Our Products</a></li> 
+           </ul>
+       </li>
+       <li><a href="updates.html">Updates</a></li>
+       <li><a href="contact.html">Contact</a></li> 
+       
+     </ul>
+     </div>
+     <div class="h3">
+        <ul>
+            <li><a href="login.html">Login</a></li> 
+            <li id="reg"> <a href="register.html">Register</a></li></ul>
+     </div>
+    </header>
+    <aside> 
+        <div>
+          <img src="images/logo.png" alt="" >
+      </div> 
+          <div onclick="openNav()" >
+              <div class="container" onclick="myFunction(this)" id="sideNav">
+                  <div class="bar1"></div>
+                  <div class="bar2"></div>
+                  <div class="bar3"></div>
+                </div>
+              </div>
+      </aside>
+        
+      <nav style="z-index: 1;">
+        <div id="mySidenav" class="sidenav">
+            <img src="images/logo.png" alt="">
+            <a href="index.html">Home</a>
+            <a class="dropdown-item" onclick="toggleDropdown()" >
+                About Us +
+                   <div class="sub-menu1" style="display: none;transition: 0.5s;background-color: #171718;
+                   color: #fff;">
+                  <a href="about.html">Company profile</a>
+                  <a href="staff.html">Our Team</a>
+                   </div>
+                 </a>
+              
+                 <script>
+                   function toggleDropdown() {
+                     const subMenu = document.querySelector('.sub-menu1');
+                     subMenu.style.display = (subMenu.style.display === 'none' || subMenu.style.display === '') ? 'block' : 'none';
+                   }
+                 </script>
+                  <a class="dropdown-item" onclick="toggleDropdown1()" >
+                    Our Services and Products +
+                       <div class="sub-menu2" style="display: none;transition: 0.5s;">
+                        <a href="services.html">Our Services</a>
+                        <a href="products.html">Our Products</a>
+                       </div>
+                     </a>
+                  
+                     <script>
+                       function toggleDropdown1() {
+                         const subMenu2 = document.querySelector('.sub-menu2');
+                         subMenu2.style.display = (subMenu2.style.display === 'none' || subMenu2.style.display === '') ? 'block' : 'none';
+                       }
+                     </script>
+          <a href="updates.html">updates</a>
+          <a href="contact.html">Contact Us</a>
+          <a href="login.html" >Sign In</a>
+            <a href="register.html">Sign UP</a>
+        </div>
+        <script>
+        
+    function myFunction(x) {
+        x.classList.toggle("change");
+      }
+    
+      var open = false;
+    
+    function openNav() {
+        var sideNav = document.getElementById("mySidenav");
+        
+        if (sideNav.style.width === "0px" || sideNav.style.width === "") {
+            sideNav.style.width = "250px";
+            open = true;
+        } else {
+            sideNav.style.width = "0";
+            open = false;
+        }
+    }
+        </script>
+    </nav>
+    <main style="background-image: url(images/bg2.png);background-position: center;background-repeat: no-repeat;background-size: cover;position: relative;height: 600px;">
+      <div style="position: absolute;top: 0;right: 0;left: 0;bottom: 0;height: auto;background-color: rgba(0, 0, 0, 0.493);" >
+      <div id="login">
+        <div style="text-align: center;color: white;margin: 20px;background-color: #2CB67D;border-radius: 10px;">
+          <h4>Login to Dashboard</h4>
+       </div>
+       
+          <div id="apply">
+            <form action="" id="form" method="post">
+              <input type="email" name="email" id="email" placeholder="Email or Phone"><br>
+              <input type="password" name="password" id="" placeholder="Password"><br>
+              <a href="forgot.html">Forgot Password?</a><br>
+              <input type="submit" name="" id="submit">
+              <p style="text-align: center;color: white;">Not a member?<a href="register.html">Register Now!</a></p>
+          </form>
+      </div>  </div>
+      <script>
+         document.addEventListener("DOMContentLoaded", function() {
+                  document.getElementById("form").addEventListener("submit", function(event) {
+                      if (!validateForm()) {
+                          event.preventDefault(); // Prevent form submission
+                      }
+                  });
+      
+                  function validateForm() {
+                      var firstName = document.getElementById("firstName").value;
+                      var lastName = document.getElementById("lastName").value;
+                      var phone = document.getElementById("phone").value;
+                      var email = document.getElementById("email").value;
+                      var message = document.getElementById("message").value;
+      
+                      // Check if any of the fields are empty
+                      if (firstName === '' || lastName === '' || phone === '' || email === '' || message === '') {
+                          alert("Please fill in all fields.");
+                          return false; // Prevent form submission
+                      }
+      
+                      return true; // Allow form submission
+                  }
+              });
+      
+              window.onload = function() {
+                setTimeout(function() {
+                  var applyDiv = document.getElementById('form');
+                  if (applyDiv) {
+                    applyDiv.style.opacity = '1';
+          
+                    requestAnimationFrame(function() {
+                      applyDiv.style.transition = 'opacity 2s ease';
+                    });
+                  }
+                }, 700); 
+              };
+            </script> 
+      </div>
+      </main>
+      
+    <footer></footer>
+</body>
+</html>

@@ -1,0 +1,15 @@
+#hero{
+    clip-path: polygon(0% 0%, 100% 0, 100% 50%, 68% 100%, 0% 100%);
+    background-image: url(images/advert.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    
+}
+
+#hero2{
+    height: 400px;
+}
+svg{
+    width: 100%;
+}

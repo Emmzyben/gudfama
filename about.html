@@ -1,0 +1,283 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="shortcut icon" href="images/logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://kit.fontawesome.com/f0fb58e769.js" crossorigin="anonymous"></script>
+<style>
+    
+</style>
+</head>
+<body>
+    <header>
+     <div class="h1">
+        <img src="images/logo.png" alt="">
+     </div>
+     <div class="h2">
+        <ul>
+       <li><a href="index.html">Home</a></li> 
+        <li class="nav-container">
+            <span id="hoverer">About</span> 
+             <ul id="dropdown">
+              <li><a href="about.html">Company Profile</a></li> 
+              <li><a href="staff.html">Our Team</a></li> 
+             </ul>
+            </li>
+       <li class="nav-container">
+        <span id="hoverer">Our Services/Products</span> 
+        <ul id="dropdown">
+            <li><a href="services.html">Our Services</a></li> 
+            <li><a href="Products.html">Our Products</a></li> 
+           </ul>
+       </li>
+       <li><a href="updates.html">Updates</a></li>
+       <li><a href="contact.html">Contact</a></li> 
+       
+     </ul>
+     </div>
+     <div class="h3">
+        <ul>
+            <li><a href="login.html">Login</a></li> 
+            <li id="reg"> <a href="register.html">Register</a></li></ul>
+     </div>
+    </header>
+    <aside> 
+        <div>
+          <img src="images/logo.png" alt="" >
+      </div> 
+          <div onclick="openNav()" >
+              <div class="container" onclick="myFunction(this)" id="sideNav">
+                  <div class="bar1"></div>
+                  <div class="bar2"></div>
+                  <div class="bar3"></div>
+                </div>
+              </div>
+      </aside>
+        
+      <nav style="z-index: 1;">
+        <div id="mySidenav" class="sidenav">
+            <img src="images/logo.png" alt="">
+            <a href="index.html">Home</a>
+            <a class="dropdown-item" onclick="toggleDropdown()" >
+                About Us +
+                   <div class="sub-menu1" style="display: none;transition: 0.5s;background-color: #171718;
+                   color: #fff;">
+                  <a href="about.html">Company profile</a>
+                  <a href="staff.html">Our Team</a>
+                   </div>
+                 </a>
+              
+                 <script>
+                   function toggleDropdown() {
+                     const subMenu = document.querySelector('.sub-menu1');
+                     subMenu.style.display = (subMenu.style.display === 'none' || subMenu.style.display === '') ? 'block' : 'none';
+                   }
+                 </script>
+                  <a class="dropdown-item" onclick="toggleDropdown1()" >
+                    Our Services and Products +
+                       <div class="sub-menu2" style="display: none;transition: 0.5s;">
+                        <a href="services.html">Our Services</a>
+                        <a href="products.html">Our Products</a>
+                       </div>
+                     </a>
+                  
+                     <script>
+                       function toggleDropdown1() {
+                         const subMenu2 = document.querySelector('.sub-menu2');
+                         subMenu2.style.display = (subMenu2.style.display === 'none' || subMenu2.style.display === '') ? 'block' : 'none';
+                       }
+                     </script>
+          <a href="updates.html">updates</a>
+          <a href="contact.html">Contact Us</a>
+          <a href="login.html" >Sign In</a>
+            <a href="register.html">Sign UP</a>
+        </div>
+        <script>
+        
+    function myFunction(x) {
+        x.classList.toggle("change");
+      }
+    
+      var open = false;
+    
+    function openNav() {
+        var sideNav = document.getElementById("mySidenav");
+        
+        if (sideNav.style.width === "0px" || sideNav.style.width === "") {
+            sideNav.style.width = "250px";
+            open = true;
+        } else {
+            sideNav.style.width = "0";
+            open = false;
+        }
+    }
+        </script>
+    </nav>
+    <main>
+        <div id="hero">
+            <img src="images/bg.png" alt="">
+            <div id="underhero">
+                <div id="hero1">
+                    <h2>Gladius Urban Farm Africa</h2>
+          <h1>Virtual Farming and <br> Farmer Training <br>Services
+    </h1>
+    <p> COMPANY PROFILE</p>
+                </div>
+                <div id="hero2">
+<img src="images/image1.png" alt="">
+                </div>
+            </div>
+        </div>
+
+        <section >
+            <div id="undersection">
+                <p style="background-color: #01ff95;width: 70px;padding: 8px;color: black;"><b>About Us</b></p>
+              <h1>Urban farming made easy</h1>  
+
+               <p>In 2014, Business Gladius Africa (BGA) was born from a need to see that the average business owner is positioned rightly for success in the large market. Over the years, Business Gladius Africa has worked as a manufacturer's representative and marketing service provider to boost numerous company products and services so that they can meet the ever-growing market demands.
+</p> 
+               <p>Eleven years later, Business Gladius Africa has garnered success working with Small and Mid-sized Enterprises (SMEs) and has expanded efforts into empowering Nigerians in the agribusiness sector through a subsidiary company, Gladius Urban Farm Africa, aka GUDFAMA.
+</p>                 
+              <p>What is GUDFAMA?</p>  
+                
+              <p> GUDFAMA is a subsidiary of Business Gladius Africa (BGA), created to solve the food crisis in Nigeria and Africa caused by the explosive rural-urban migration. 
+</p>                 
+            </div>
+   <div id="section"> 
+   <div id="box"> 
+    <div id="uk">
+        <h3 >OUR MISSION</h3>
+</div>
+  
+  </div>
+
+    <div style="display: flex;flex-direction: column;">
+<div class="rounds">
+<div class="r1"><img src="images/advert.png" alt=""></div>
+<div class="r2"><img src="images/image2.png" alt=""></div>
+<div class="r3"><img src="images/fish1.png" alt=""></div>
+<script>
+    window.addEventListener('scroll', function() {
+    var section = document.getElementById('section');
+    var r1 = document.querySelector('.rounds > .r1');
+    var r2 = document.querySelector('.rounds > .r2');
+    var r3 = document.querySelector('.rounds > .r3');
+
+    if (!section) return; // Check if the section element exists
+
+    var sectionOffset = section.offsetTop;
+    var sectionHeight = section.offsetHeight;
+    var scrollPosition = window.scrollY;
+
+    // Check if the scroll position is within the range of the section element
+    if (scrollPosition >= sectionOffset && scrollPosition <= (sectionOffset + sectionHeight)) {
+      r1.classList.add('scroll-reached');
+      r2.classList.add('scroll-reached');
+      r3.classList.add('scroll-reached');
+    } else {
+      r1.classList.remove('scroll-reached');
+      r2.classList.remove('scroll-reached');
+      r3.classList.remove('scroll-reached');
+    }
+  });
+</script>
+</div>
+</div>
+</div>
+<div class="list">
+<div style="padding: 10px;font-size: 23px;">
+<p>To solve the food crisis in
+    Nigeria and Africa caused
+    by the explosive rural-urban
+    migration. 
+    
+    </p>
+</div>
+<div >
+<h2 style="background-color: #01ff95;text-align: center;padding: 10px;margin:20px;border-radius: 10px;color: rgb(48, 45, 45);">Get Started</h2>
+<ul>
+  <li>
+  <h3> Client-centric excellence</h3> 
+
+<p>Our mission is to deliver client-centric excellence in
+every aspect of our farm solution services</p></li>  
+
+<li>
+  <h3>Driving Transformation through Farming</h3>  
+
+<p>As a virtual farming and training service provider, our
+mission is to empower our clients through agriculture</p>
+</li> 
+
+<li>
+ <h3>Enabling seamless agribusiness processes</h3>   
+
+<p>Provide exceptional services that enable
+agribusiness thrive while providing timely Return on
+Investment</p>
+</li>
+</ul>
+<br>
+<a href="register.html" style="background-color: #01ff95;text-align: center;padding: 8px;margin:20px;border-radius: 10px;color: rgb(0, 0, 0);text-decoration: none;"><b>Apply now</b></a>
+
+</div>
+
+
+
+</div>
+</section>
+    </main>
+    
+    <footer>
+      <div class="foot">
+        <div class="f1">
+          <h3>About Us</h3>
+      <p style="line-height: 23px;">GUDFAMA, a subsidiary of Business Gladius Africa (BGA), was established to address Nigeria and Africa's food crisis caused by rural-urban migration. Born in 2014, BGA has worked as a manufacturer's representative and marketing service provider, focusing on SMEs. In 2025, it expanded its efforts into the agribusiness sector with GUDFAMA.</p>
+     </div>
+        <div class="f2">
+          <h3>Quick links</h3>
+         <p><i class="fa-solid fa-arrow-right"></i><a href="index.html">Home</a></p> 
+         <p><i class="fa-solid fa-arrow-right"></i><a href="updates.html">Updates</a></p> 
+         <p><i class="fa-solid fa-arrow-right"></i><a href="contact.html">Contact</a></p> 
+         <p><i class="fa-solid fa-arrow-right"></i><a href="login.html">Dashboard</a></p> 
+         <p><i class="fa-solid fa-arrow-right"></i><a href="register.html">Register</a></p> 
+        </div>
+        <div class="f2">
+          <h3>Company</h3>
+        <p><i class="fa-solid fa-arrow-right"></i><a href="about.html">Company Profile</a></p>  
+        <p><i class="fa-solid fa-arrow-right"></i><a href="staff.html">Our Team</a></p>  
+        <p><i class="fa-solid fa-arrow-right"></i><a href="services.html">Our Services</a></p>  
+        <p><i class="fa-solid fa-arrow-right"></i><a href="products.html">Our Products</a></p>  
+        </div>
+        <div class="f1">
+          <h3>Have a Question?</h3>
+          <p><b> <i class="fa fa-map-marker" style=" font-size:20px;color:#2CB67D;padding-right: 10px"></i>Farm:</b>o. 24 APA mini Street Off Y Junction,
+            Miniorlu Ada-George.                                                                                                                             
+          </p>
+          <p><b> <i class="fa fa-map-marker" style=" font-size:20px;color:#2CB67D;padding-right: 10px"></i>Office:</b> Castel Resources No. 99 Olu-Obasanjo
+            New Phrase 1, Port Harcourt, Rivers State.
+                                                                                                                                       
+          </p>
+          <p><b><i class="fa fa-phone" style="font-size:15px;color:#2CB67D;padding-right: 10px;"></i>Telephone:</b> 07042715386, 08069902316
+          </p>
+          <p><p><i class="fa fa-envelope" style="font-size:15px;color:#2CB67D;padding-right: 10px;"></i><b>Email:</b> info@gudfama.com
+          </p>
+        </div>
+      </div>
+      <div class="socials">
+        <p>Copyright 2024 Gudfama.com</p>
+        <div style="display: flex;flex-direction: row;justify-content: center;">
+          <a href="#" style="margin-bottom: 10px;"><i class="fa fa-facebook-official" style="font-size:24px;color:#2CB67D"></i> </a>
+          <a  href="#" style="margin-bottom: 10px;"><i class="fa-brands fa-x-twitter" style="font-size:24px;color:#2CB67D"></i></a>
+          <a class="ml-3 text-gray-500" href="#" style="margin-bottom: 10px;"><i class="fa fa-instagram" style="font-size:24px;color:#2CB67D"></i></a>
+      <a class="ml-3 text-gray-500" href="#" style="margin-bottom: 10px;"><i class="fa-brands fa-whatsapp" style="font-size:24px;color:#2CB67D"></i></a>
+        </div>
+      </div>
+      </div>
+    </footer>
+</body>
+</html>
