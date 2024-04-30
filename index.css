@@ -560,7 +560,8 @@ color: rgb(180, 172, 172);
     width: 100%; 
   }
   #apply>form>input{
-    width: 100%;
+    width: 95%;
+  
   }
   .foot{
    flex-direction: column;
