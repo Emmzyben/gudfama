@@ -556,6 +556,9 @@ color: rgb(180, 172, 172);
   padding-right: 10px;
 }
 @media only screen and (max-width: 600px) {
+  #apply>form>input,textarea{
+width: auto;
+  }
   .foot{
    flex-direction: column;
   
