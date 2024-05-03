@@ -1,15 +1,219 @@
-#hero1{
-    clip-path: polygon(0% 0%, 100% 0, 100% 50%, 68% 100%, 0% 100%);
-    background-image: url(images/advert.png);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    
+
+svg{
+    width: 100%;
+}
+
+#writeup-1{
+  margin-top: -2%;
+  position: relative;
+}
+#writeup-2{
+  margin-top: -2%;
+  position: relative;
+}
+#writeup-3{
+  margin-top: -2%;
+  position: relative;
+  
+}
+#film{
+  z-index: +1;
+  color: black;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 30px;
+  background-color: rgba(0, 0, 0, 0.527);
+  text-align: center;
+}
+.bgcover1{
+  color:#fff;
+  height: 450px; clip-path: polygon(0% 0%, 100% 0, 100% 50%, 68% 100%, 0% 100%)
+}
+.bgcover1>div>div>h2{
+  font-size: 70px;
+  color: white;
+}
+.bgcover1>div>div>a{
+  color:#fff;
+  background-color: #2CB67D;
+  padding: 4px;
+  border-radius: 15px;
+  z-index: 1;
+  border: none;
+  font-weight: bold;
+  padding-left: 15px;
+  padding-right: 15px;
+  text-decoration: none;
+}
+
+.bgcover1>div>div>a:hover{
+  background-color:#2CB67D ;
+  color: #fff;
+  border: 1px solid #ffffff;
+}
+.writeup {
+  display: none;
+}
+.writeup>div>p{
+  font-size: x-large;
+  color: white;
+}
+.writeup>div h2{
+  line-height: 60px;
+}
+.writeup>div>button{
+  background-color: #2CB67D;
+  padding: 17px;
+  border: none;
+  border-radius: 50px;
+  margin: 20px;
+}
+.writeup>div>button>a{
+  color: #fff;
+  text-decoration: none;
+  font-size: large;
+}
+.active {
+  display: block;
+  animation: fadeInOut 3.5s ease-in-out forwards;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 #hero2{
-    height: 400px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 95%;
 }
-svg{
-    width: 100%;
+#hero2>div{
+margin: 30px;
+}
+#hero2 img{
+  width: 100%;border: 6px solid #2CB67D;
+  height: 300px;clip-path: polygon(20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%);;
+}
+.he2{
+  width: 60%;
+  padding: 20px;
+line-height: 30px;
+}
+.he1{
+  width: 40%;
+}
+#steps{
+  text-align: center;
+  background-color: #2CB67D;
+  padding: 40px; color: white;
+}
+.steps{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+ 
+}
+.steps>div{
+  width: 20%;
+  background-color: #fff;
+  margin: 20px;
+  color: rgb(22, 21, 21);border-radius: 7px;
+}
+.steps>div>div{
+ padding: 10px;
+}
+.steps h2{
+  font-size: 17px;
+}
+.steps h3{
+  background-color: #2CB67D;
+  color: white;
+}
+.steps i{
+  font-size: 30px;color: #2CB67D;
+}
+#bottom{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+#bottom>div{
+  padding: 40px;
+  width: 50%;
+}
+#bottom h1{
+  color: #2CB67D;
+}
+#bottom button{
+  background-color: #2CB67D;border: none;padding: 10px;margin: 5px;width: 100%;text-align: left;color: white;
+font-size: 16px;border-radius: 7px;
+}
+.divas {
+  height: 0;
+  overflow: hidden;
+  transition: height 0.5s ease;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.divas.show {
+  height: auto;
+}
+@media screen and (max-width:700px) {
+  #bottom{
+    flex-direction: column;
+  }
+  #bottom>div{
+    padding: 30px;
+    width: auto;
+  }
+#hero2{
+  flex-direction: column;
+  width: auto;
+}
+#hero2>div{
+  margin: 0;
+}
+.he1{
+  display: none;
+  width: auto;
+}
+.he2{
+  width: auto;
+  padding: 20px;
+}
+  .bgcover1>div>div>h2{
+    font-size: 30px;
+    color: white;
+  }
+  .steps{
+   flex-direction: column;
+   
+  }
+  .steps>div{
+    width: auto;
+    background-color: #fff;
+    margin: 20px;
+    color: rgb(22, 21, 21);
+    padding: 20px;
+  }
+  .steps>div>div{
+    padding: 0;
+  }
 }
