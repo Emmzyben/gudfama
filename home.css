@@ -157,6 +157,12 @@ line-height: 30px;
   padding: 40px;
   width: 50%;
 }
+#bottom i{
+  font-size: 150px;
+  color: #2CB67D;
+  position: relative;
+  left: 24%;
+}
 #bottom h1{
   color: #2CB67D;
 }
@@ -178,10 +184,14 @@ font-size: 16px;border-radius: 7px;
 @media screen and (max-width:700px) {
   #bottom{
     flex-direction: column;
+    margin-left: -7px;
   }
   #bottom>div{
     padding: 30px;
     width: auto;
+  }
+  #bottom i{
+    display: none;
   }
 #hero2{
   flex-direction: column;
@@ -195,7 +205,7 @@ font-size: 16px;border-radius: 7px;
   width: auto;
 }
 .he2{
-  width: auto;
+  width: 100%;
   padding: 20px;
 }
   .bgcover1>div>div>h2{
@@ -204,14 +214,15 @@ font-size: 16px;border-radius: 7px;
   }
   .steps{
    flex-direction: column;
-   
+   margin-left: -6px;
   }
   .steps>div{
     width: auto;
     background-color: #fff;
-    margin: 20px;
+    margin: 10px;
     color: rgb(22, 21, 21);
     padding: 20px;
+    margin-bottom: 20px;
   }
   .steps>div>div{
     padding: 0;

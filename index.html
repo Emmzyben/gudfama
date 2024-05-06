@@ -26,10 +26,17 @@
              </ul>
             </li>
        <li class="nav-container">
-        <span id="hoverer">Our Services/Products</span> 
+        <span id="hoverer">Services/Products</span> 
         <ul id="dropdown">
             <li><a href="services.html">Our Services</a></li> 
             <li><a href="Products.html">Our Products</a></li> 
+           </ul>
+       </li>
+       <li class="nav-container">
+        <span id="hoverer">Gallery</span> 
+        <ul id="dropdown">
+            <li><a href="photos.html">Photos</a></li> 
+            <li><a href="videos.html">Videos</a></li> 
            </ul>
        </li>
        <li><a href="updates.html">Updates</a></li>
@@ -62,7 +69,7 @@
             <a href="index.html">Home</a>
             <a class="dropdown-item" onclick="toggleDropdown()" >
                 About Us +
-                   <div class="sub-menu1" style="display: none;transition: 0.5s;background-color: #171718;
+                   <div class="sub-menu1" style="display: none;transition: 0.5s;background-color: #2e2e33;
                    color: #fff;">
                   <a href="about.html">Company profile</a>
                   <a href="staff.html">Our Team</a>
@@ -76,8 +83,8 @@
                    }
                  </script>
                   <a class="dropdown-item" onclick="toggleDropdown1()" >
-                    Our Services and Products +
-                       <div class="sub-menu2" style="display: none;transition: 0.5s;">
+                    Services and Products +
+                       <div class="sub-menu2" style="display: none;transition: 0.5s;background-color: #2e2e33">
                         <a href="services.html">Our Services</a>
                         <a href="products.html">Our Products</a>
                        </div>
@@ -89,6 +96,20 @@
                          subMenu2.style.display = (subMenu2.style.display === 'none' || subMenu2.style.display === '') ? 'block' : 'none';
                        }
                      </script>
+                     <a class="dropdown-item" onclick="toggleDropdown3()" >
+                      Gallery +
+                         <div class="sub-menu3" style="display: none;transition: 0.5s;background-color: #2e2e33">
+                          <a href="photos.html">Photos</a>
+                          <a href="videos.html">Videos</a>
+                         </div>
+                       </a>
+                    
+                       <script>
+                         function toggleDropdown3() {
+                           const subMenu3 = document.querySelector('.sub-menu3');
+                           subMenu3.style.display = (subMenu3.style.display === 'none' || subMenu3.style.display === '') ? 'block' : 'none';
+                         }
+                       </script>
           <a href="updates.html">updates</a>
           <a href="contact.html">Contact Us</a>
           <a href="login.html" >Sign In</a>
@@ -210,6 +231,7 @@
     <p> FAQ</p> 
 <h1>Common questions</h1>
 <p>Here are some of the most common questions that we get.</p>
+<i class="fa-solid fa-question"></i>
   </div>
   <div>
     <div>
