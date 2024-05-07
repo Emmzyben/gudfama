@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Videos</title>
+    <title>Photos</title>
     <link rel="stylesheet" href="index.css">
     <link rel="shortcut icon" href="images/logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -34,19 +34,19 @@
       <li class="nav-container">
        <span id="hoverer">Gallery</span> 
         <ul id="dropdown">
-            <li><a href="photos.html">Photos</a></li> 
-            <li><a href="videos.html">Videos</a></li> 
+            <li><a href="photos.php">Photos</a></li> 
+            <li><a href="videos.php">Videos</a></li> 
            </ul>
       </li>
-      <li><a href="updates.html">Updates</a></li>
+      <li><a href="updates.php">Updates</a></li>
       <li><a href="contact.html">Contact</a></li> 
       
     </ul>
     </div>
     <div class="h3">
        <ul>
-           <li><a href="login.html">Login</a></li> 
-           <li id="reg"> <a href="register.html">Register</a></li></ul>
+           <li><a href="login.php">Login</a></li> 
+           <li id="reg"> <a href="register.php">Register</a></li></ul>
     </div>
    </header>
    <aside> 
@@ -98,8 +98,8 @@
                     <a class="dropdown-item" onclick="toggleDropdown3()" >
                      Gallery +
                                                 <div class="sub-menu3" style="display: none;transition: 0.5s;background-color: #2e2e33">
-                          <a href="photos.html">Photos</a>
-                          <a href="videos.html">Videos</a>
+                          <a href="photos.php">Photos</a>
+                          <a href="videos.php">Videos</a>
                          </div>
                       </a>
                    
@@ -109,10 +109,10 @@
                           subMenu3.style.display = (subMenu3.style.display === 'none' || subMenu3.style.display === '') ? 'block' : 'none';
                         }
                       </script>
-         <a href="updates.html">updates</a>
+         <a href="updates.php">updates</a>
          <a href="contact.html">Contact Us</a>
-         <a href="login.html" >Sign In</a>
-           <a href="register.html">Sign UP</a>
+         <a href="login.php" >Sign In</a>
+           <a href="register.php">Sign UP</a>
        </div>
        <script>
        
@@ -137,10 +137,10 @@
    </nav>
    <main>
     <div id="Gallery">
-       <h3>Video Gallery</h3>
-
-
-        </div>
+        <h3>Photo Gallery</h3>
+ 
+ 
+         </div>
    </main>
    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#128354" fill-opacity="1" d="M0,224L60,218.7C120,213,240,203,360,208C480,213,600,235,720,256C840,277,960,299,1080,282.7C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
     
@@ -153,10 +153,10 @@
       <div class="f2">
         <h3>Quick links</h3>
        <p><i class="fa-solid fa-arrow-right"></i><a href="index.html">Home</a></p> 
-       <p><i class="fa-solid fa-arrow-right"></i><a href="updates.html">Updates</a></p> 
+       <p><i class="fa-solid fa-arrow-right"></i><a href="updates.php">Updates</a></p> 
        <p><i class="fa-solid fa-arrow-right"></i><a href="contact.html">Contact</a></p> 
-       <p><i class="fa-solid fa-arrow-right"></i><a href="login.html">Dashboard</a></p> 
-       <p><i class="fa-solid fa-arrow-right"></i><a href="register.html">Register</a></p> 
+       <p><i class="fa-solid fa-arrow-right"></i><a href="login.php">Dashboard</a></p> 
+       <p><i class="fa-solid fa-arrow-right"></i><a href="register.php">Register</a></p> 
       </div>
       <div class="f2">
         <h3>Company</h3>

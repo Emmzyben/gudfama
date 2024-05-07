@@ -3,18 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Now</title>
+    <title>Videos</title>
     <link rel="stylesheet" href="index.css">
     <link rel="shortcut icon" href="images/logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://kit.fontawesome.com/f0fb58e769.js" crossorigin="anonymous"></script>
-<style>
-     #form {
-    opacity: 0;
-    transition: opacity 2s ease;
-  }
-</style>
-  </head>
+</head>
 <body>
   <header>
     <div class="h1">
@@ -40,19 +34,19 @@
       <li class="nav-container">
        <span id="hoverer">Gallery</span> 
         <ul id="dropdown">
-            <li><a href="photos.html">Photos</a></li> 
-            <li><a href="videos.html">Videos</a></li> 
+            <li><a href="photos.php">Photos</a></li> 
+            <li><a href="videos.php">Videos</a></li> 
            </ul>
       </li>
-      <li><a href="updates.html">Updates</a></li>
+      <li><a href="updates.php">Updates</a></li>
       <li><a href="contact.html">Contact</a></li> 
       
     </ul>
     </div>
     <div class="h3">
        <ul>
-           <li><a href="login.html">Login</a></li> 
-           <li id="reg"> <a href="register.html">Register</a></li></ul>
+           <li><a href="login.php">Login</a></li> 
+           <li id="reg"> <a href="register.php">Register</a></li></ul>
     </div>
    </header>
    <aside> 
@@ -104,8 +98,8 @@
                     <a class="dropdown-item" onclick="toggleDropdown3()" >
                      Gallery +
                                                 <div class="sub-menu3" style="display: none;transition: 0.5s;background-color: #2e2e33">
-                          <a href="photos.html">Photos</a>
-                          <a href="videos.html">Videos</a>
+                          <a href="photos.php">Photos</a>
+                          <a href="videos.php">Videos</a>
                          </div>
                       </a>
                    
@@ -115,10 +109,10 @@
                           subMenu3.style.display = (subMenu3.style.display === 'none' || subMenu3.style.display === '') ? 'block' : 'none';
                         }
                       </script>
-         <a href="updates.html">updates</a>
+         <a href="updates.php">updates</a>
          <a href="contact.html">Contact Us</a>
-         <a href="login.html" >Sign In</a>
-           <a href="register.html">Sign UP</a>
+         <a href="login.php" >Sign In</a>
+           <a href="register.php">Sign UP</a>
        </div>
        <script>
        
@@ -141,64 +135,61 @@
    }
        </script>
    </nav>
-    <main style="background-image: url(images/bg2.png);background-position: center;background-repeat: no-repeat;background-size: cover;position: relative;height: 600px;">
-      <div style="position: absolute;top: 0;right: 0;left: 0;bottom: 0;height: auto;background-color: rgba(0, 0, 0, 0.493);" >
-      <div id="login">
-        <div style="text-align: center;color: white;margin: 20px;background-color: #2CB67D;border-radius: 10px;">
-          <h4>Login to Dashboard</h4>
-       </div>
-       
-          <div id="apply">
-            <form action="" id="form" method="post">
-              <input type="email" name="email" id="email" placeholder="Email or Phone"><br>
-              <input type="password" name="password" id="" placeholder="Password"><br>
-              <a href="forgot.html">Forgot Password?</a><br>
-              <input type="submit" name="" id="submit">
-              <p style="text-align: center;color: white;">Not a member?<a href="register.html">Register Now!</a></p>
-          </form>
-      </div>  
-    </div>
-      <script>
-         document.addEventListener("DOMContentLoaded", function() {
-                  document.getElementById("form").addEventListener("submit", function(event) {
-                      if (!validateForm()) {
-                          event.preventDefault(); // Prevent form submission
-                      }
-                  });
-      
-                  function validateForm() {
-                      var firstName = document.getElementById("firstName").value;
-                      var lastName = document.getElementById("lastName").value;
-                      var phone = document.getElementById("phone").value;
-                      var email = document.getElementById("email").value;
-                      var message = document.getElementById("message").value;
-      
-                      // Check if any of the fields are empty
-                      if (firstName === '' || lastName === '' || phone === '' || email === '' || message === '') {
-                          alert("Please fill in all fields.");
-                          return false; // Prevent form submission
-                      }
-      
-                      return true; // Allow form submission
-                  }
-              });
-      
-              window.onload = function() {
-                setTimeout(function() {
-                  var applyDiv = document.getElementById('form');
-                  if (applyDiv) {
-                    applyDiv.style.opacity = '1';
-          
-                    requestAnimationFrame(function() {
-                      applyDiv.style.transition = 'opacity 2s ease';
-                    });
-                  }
-                }, 700); 
-              };
-            </script> 
+   <main>
+    <div id="Gallery">
+       <h3>Video Gallery</h3>
+
+
+        </div>
+   </main>
+   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#128354" fill-opacity="1" d="M0,224L60,218.7C120,213,240,203,360,208C480,213,600,235,720,256C840,277,960,299,1080,282.7C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    
+   <footer>
+    <div class="foot">
+      <div class="f1">
+        <h3>About Us</h3>
+    <p style="line-height: 23px;">GUDFAMA, a subsidiary of Business Gladius Africa (BGA), was established to address Nigeria and Africa's food crisis caused by rural-urban migration. Born in 2014, BGA has worked as a manufacturer's representative and marketing service provider, focusing on SMEs. In 2025, it expanded its efforts into the agribusiness sector with GUDFAMA.</p>
+   </div>
+      <div class="f2">
+        <h3>Quick links</h3>
+       <p><i class="fa-solid fa-arrow-right"></i><a href="index.html">Home</a></p> 
+       <p><i class="fa-solid fa-arrow-right"></i><a href="updates.php">Updates</a></p> 
+       <p><i class="fa-solid fa-arrow-right"></i><a href="contact.html">Contact</a></p> 
+       <p><i class="fa-solid fa-arrow-right"></i><a href="login.php">Dashboard</a></p> 
+       <p><i class="fa-solid fa-arrow-right"></i><a href="register.php">Register</a></p> 
       </div>
-      </main>
-      
-    <footer></footer>
+      <div class="f2">
+        <h3>Company</h3>
+      <p><i class="fa-solid fa-arrow-right"></i><a href="about.html">Company Profile</a></p>  
+      <p><i class="fa-solid fa-arrow-right"></i><a href="staff.html">Our Team</a></p>  
+      <p><i class="fa-solid fa-arrow-right"></i><a href="services.html">Our Services</a></p>  
+      <p><i class="fa-solid fa-arrow-right"></i><a href="products.html">Our Products</a></p>  
+      </div>
+      <div class="f1">
+        <h3>Have a Question?</h3>
+        <p><b> <i class="fa fa-map-marker" style=" font-size:20px;color:#2CB67D;padding-right: 10px"></i>Farm:</b>o. 24 APA mini Street Off Y Junction,
+          Miniorlu Ada-George.                                                                                                                             
+        </p>
+        <p><b> <i class="fa fa-map-marker" style=" font-size:20px;color:#2CB67D;padding-right: 10px"></i>Office:</b> Castel Resources No. 99 Olu-Obasanjo
+          New Phrase 1, Port Harcourt, Rivers State.
+                                                                                                                                     
+        </p>
+        <p><b><i class="fa fa-phone" style="font-size:15px;color:#2CB67D;padding-right: 10px;"></i>Telephone:</b> 07042715386, 08069902316
+        </p>
+        <p><p><i class="fa fa-envelope" style="font-size:15px;color:#2CB67D;padding-right: 10px;"></i><b>Email:</b> info@gudfama.com
+        </p>
+      </div>
+    </div>
+    <div class="socials">
+      <p>Copyright 2024 Gudfama.com</p>
+      <div style="display: flex;flex-direction: row;justify-content: center;">
+        <a href="#" style="margin-bottom: 10px;"><i class="fa fa-facebook-official" style="font-size:24px;color:#2CB67D"></i> </a>
+        <a  href="#" style="margin-bottom: 10px;"><i class="fa-brands fa-x-twitter" style="font-size:24px;color:#2CB67D"></i></a>
+        <a class="ml-3 text-gray-500" href="#" style="margin-bottom: 10px;"><i class="fa fa-instagram" style="font-size:24px;color:#2CB67D"></i></a>
+    <a class="ml-3 text-gray-500" href="#" style="margin-bottom: 10px;"><i class="fa-brands fa-whatsapp" style="font-size:24px;color:#2CB67D"></i></a>
+      </div>
+    </div>
+    </div>
+  </footer>
 </body>
 </html>

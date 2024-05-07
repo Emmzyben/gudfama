@@ -1,20 +1,67 @@
 
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+$DATABASE_HOST = 'localhost';
+$DATABASE_USER = 'root';
+$DATABASE_PASS = '';
+$DATABASE_NAME = 'afaranew';
+
+$con = mysqli_connect($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME);
+if (mysqli_connect_errno()) {
+    exit('Failed to connect to MySQL: ' . mysqli_connect_error());
+}
+$errorMessage = ''; 
+$successMessage = ''; 
+session_start();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    $stmt = $con->prepare('SELECT user_id, password FROM users WHERE email = ?');
+    $stmt->bind_param('s', $email);
+    $stmt->execute();
+    $stmt->store_result();
+
+    if ($stmt->num_rows > 0) {
+        $stmt->bind_result($user_id, $hashed_password);
+        $stmt->fetch();
+
+        if (password_verify($password, $hashed_password)) {
+            // Password is correct, so start a new session
+            session_regenerate_id();
+            $_SESSION['loggedin'] = TRUE;
+            $_SESSION['user_id'] = $user_id;
+            header('Location: dashboard.php');
+            exit;
+        } else {
+            $errorMessage .= "Incorrect Email and/or password!";
+        }
+    } else {
+      $errorMessage .= "Incorrect Email and/or password!";
+    }
+
+    $stmt->close();
+}
+?>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Team</title>
+    <title>Login Now</title>
     <link rel="stylesheet" href="index.css">
     <link rel="shortcut icon" href="images/logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://kit.fontawesome.com/f0fb58e769.js" crossorigin="anonymous"></script>
-    <style>
-       #team1 {
+<style>
+     #form {
     opacity: 0;
     transition: opacity 2s ease;
   }
-    </style>
-</head>
+</style>
+  </head>
 <body>
   <header>
     <div class="h1">
@@ -141,106 +188,49 @@
    }
        </script>
    </nav>
-    <main style="background-image: url(images/bg.png);background-position: center;background-repeat: no-repeat;background-size: cover;position: relative;" class="height">
-      <div id="team" style="position: absolute;top: 0;right: 0;left: 0;bottom: 0;height: auto;background-color: rgba(0, 0, 0, 0.493);" >
-       <h1>Meet the Gudfama team</h1>
-       <div id="team1">
-   <div>
-    <img src="images/ceo.png" alt="">
-    <div id="names">
-      <h3>Prince Emeka Ineh</h3>
-     <h4>CEO FOUNDER</h4> 
-     <p>prince@gudfama.com</p> 
-    </div>
-   </div>
-   <div>
-    <img src="images/manager.png" alt="">
-    <div id="names">
-     <h3>Adaugo Nwaiwu</h3> 
-     <h4>GENERAL MANAGER</h4> 
-      <p>adaugo@gudfama.com</p>
-    </div>
-   </div>
-   <div>
-    <img src="images/market.jpg" alt="">
-    <div id="names">
-      <h3>Comfort Jacob</h3>
-      <h4>HEAD OF MARKETING</h4>
-     <p>comfort@gudfama.com</p> 
-    </div>
-   </div>
-  
-   <div>
-    <img src="images/blessing1.jpg" alt="">
-    <div id="names">
-      <h3>Blessing Etim Ibanga</h3>
-<h4>CUSTOMER CARE REP</h4>
-<p>blessing.etim@gudfama.com</p>
-</div>
-   </div>
-   <div>
-    <img src="images/farm manager.jpg" alt="">
-    <div id="names">
-      <h3>Fubara Henrietta</h3>
-<h4>FARM MANAGER</h4>
- <p>fubara.henrietta@gudfama.com</p> 
-    </div>
-  </div>
+    <main style="background-image: url(images/bg2.png);background-position: center;background-repeat: no-repeat;background-size: cover;position: relative;height: 600px;">
+      <div style="position: absolute;top: 0;right: 0;left: 0;bottom: 0;height: auto;background-color: rgba(0, 0, 0, 0.493);" >
+      <div id="login">
+        <div style="text-align: center;color: white;margin: 20px;background-color: #2CB67D;border-radius: 10px;">
+          <h4>Login to Dashboard</h4>
        </div>
-
-</div>
-    </main>
-    <footer>
-      <div class="foot">
-        <div class="f1">
-          <h3>About Us</h3>
-      <p style="line-height: 23px;">GUDFAMA, a subsidiary of Business Gladius Africa (BGA), was established to address Nigeria and Africa's food crisis caused by rural-urban migration. Born in 2014, BGA has worked as a manufacturer's representative and marketing service provider, focusing on SMEs. In 2025, it expanded its efforts into the agribusiness sector with GUDFAMA.</p>
-     </div>
-        <div class="f2">
-          <h3>Quick links</h3>
-         <p><i class="fa-solid fa-arrow-right"></i><a href="index.html">Home</a></p> 
-         <p><i class="fa-solid fa-arrow-right"></i><a href="updates.php">Updates</a></p> 
-         <p><i class="fa-solid fa-arrow-right"></i><a href="contact.html">Contact</a></p> 
-         <p><i class="fa-solid fa-arrow-right"></i><a href="login.php">Dashboard</a></p> 
-         <p><i class="fa-solid fa-arrow-right"></i><a href="register.php">Register</a></p> 
-        </div>
-        <div class="f2">
-          <h3>Company</h3>
-        <p><i class="fa-solid fa-arrow-right"></i><a href="about.html">Company Profile</a></p>  
-        <p><i class="fa-solid fa-arrow-right"></i><a href="staff.html">Our Team</a></p>  
-        <p><i class="fa-solid fa-arrow-right"></i><a href="services.html">Our Services</a></p>  
-        <p><i class="fa-solid fa-arrow-right"></i><a href="products.html">Our Products</a></p>  
-        </div>
-        <div class="f1">
-          <h3>Have a Question?</h3>
-          <p><b> <i class="fa fa-map-marker" style=" font-size:20px;color:#2CB67D;padding-right: 10px"></i>Farm:</b>o. 24 APA mini Street Off Y Junction,
-            Miniorlu Ada-George.                                                                                                                             
-          </p>
-          <p><b> <i class="fa fa-map-marker" style=" font-size:20px;color:#2CB67D;padding-right: 10px"></i>Office:</b> Castel Resources No. 99 Olu-Obasanjo
-            New Phrase 1, Port Harcourt, Rivers State.
-                                                                                                                                       
-          </p>
-          <p><b><i class="fa fa-phone" style="font-size:15px;color:#2CB67D;padding-right: 10px;"></i>Telephone:</b> 07042715386, 08069902316
-          </p>
-          <p><p><i class="fa fa-envelope" style="font-size:15px;color:#2CB67D;padding-right: 10px;"></i><b>Email:</b> info@gudfama.com
-          </p>
-        </div>
-      </div>
-      <div class="socials">
-        <p>Copyright 2024 Gudfama.com</p>
-        <div style="display: flex;flex-direction: row;justify-content: center;">
-          <a href="#" style="margin-bottom: 10px;"><i class="fa fa-facebook-official" style="font-size:24px;color:#2CB67D"></i> </a>
-          <a  href="#" style="margin-bottom: 10px;"><i class="fa-brands fa-x-twitter" style="font-size:24px;color:#2CB67D"></i></a>
-          <a class="ml-3 text-gray-500" href="#" style="margin-bottom: 10px;"><i class="fa fa-instagram" style="font-size:24px;color:#2CB67D"></i></a>
-      <a class="ml-3 text-gray-500" href="#" style="margin-bottom: 10px;"><i class="fa-brands fa-whatsapp" style="font-size:24px;color:#2CB67D"></i></a>
-        </div>
-      </div>
-      </div>
-    </footer>
-    <script>
-       window.onload = function() {
+       
+          <div id="apply">
+            <form action="" id="form" method="post">
+              <input type="email" name="email" id="email" placeholder="Email or Phone"><br>
+              <input type="password" name="password" id="password" placeholder="Password"><br>
+              <a href="forgot.html">Forgot Password?</a><br>
+              <input type="submit" name="" id="submit"><br>
+              <p style="text-align: center;color: white;">Not a member?<a href="register.php">Register Now!</a></p>
+             
+            </form>
+      </div>  
+    </div>
+      <script>
+         document.addEventListener("DOMContentLoaded", function() {
+                  document.getElementById("form").addEventListener("submit", function(event) {
+                      if (!validateForm()) {
+                          event.preventDefault(); // Prevent form submission
+                      }
+                  });
+      
+                  function validateForm() {
+                      var email = document.getElementById("email").value;
+                      var password = document.getElementById("password").value;
+      
+                      // Check if any of the fields are empty
+                      if ( email === '' || password === '') {
+                        document.getElementById("box").innerHTML="Please fill in all fields"
+                          return false; // Prevent form submission
+                      }
+      
+                      return true; // Allow form submission
+                  }
+              });
+      
+              window.onload = function() {
                 setTimeout(function() {
-                  var applyDiv = document.getElementById('team1');
+                  var applyDiv = document.getElementById('form');
                   if (applyDiv) {
                     applyDiv.style.opacity = '1';
           
@@ -250,6 +240,26 @@
                   }
                 }, 700); 
               };
-    </script>
+            </script> 
+      </div>
+      </main>
+      
+    <footer></footer>
+    <?php
+        if ($errorMessage !== '') {
+            echo '<div style="color: red;text-align:center; position: fixed;
+            bottom: 5%;
+            right: 5% ;background-color:black;padding:20px">' . $errorMessage . '</div>';
+        }
+
+        if ($successMessage !== '') {
+            echo '<div style="color: #2CB67D;text-align:center; position: fixed;
+            bottom: 5%;
+            right: 5% ;background-color:black;padding:20px" >' . $successMessage . '</div>';
+        }
+    ?>
+     <div id="box" style="color:white;text-align:center; position: fixed;
+            bottom: 5%;
+            right: 5% ;;padding:20px" ></div>
 </body>
 </html>

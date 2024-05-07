@@ -181,6 +181,9 @@ font-size: 16px;border-radius: 7px;
 .divas.show {
   height: auto;
 }
+
+
+
 @media screen and (max-width:700px) {
   #bottom{
     flex-direction: column;

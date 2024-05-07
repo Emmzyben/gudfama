@@ -1,3 +1,62 @@
+<?php
+
+$servername = 'localhost';
+$username = "root";
+$password = "";
+$database = "gudfama";
+
+// Create a database connection
+$connection = mysqli_connect($servername, $username, $password, $database);
+
+// Check the connection
+if (!$connection) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+
+$errorMessage = ''; 
+$successMessage = ''; 
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $fullName = $_POST['FullName'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $subscription = $_POST['subscription'];
+    $dob = $_POST['DOB'];
+    $stateOfResidence = $_POST['State_Of_Residence'];
+    $password = $_POST['password'];
+    $howDidYouHearAboutUs = $_POST['How_did_you_hear_About_Us'];
+
+    // File upload
+    $targetDir = "uploads/";
+    $targetFile = $targetDir . basename($_FILES["image"]["name"]);
+    $fileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+
+    // Allow certain file formats
+    $allowedTypes = array('jpg', 'jpeg', 'png', 'gif');
+
+    if (in_array($fileType, $allowedTypes)) {
+        // Upload file
+        if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
+            // Insert data into database
+            $sql = "INSERT INTO users (full_name, email, phone, subscription, dob, state_of_residence, password, how_did_you_hear_about_us, profile_picture) 
+                    VALUES ('$fullName', '$email', '$phone', '$subscription', '$dob', '$stateOfResidence', '$password', '$howDidYouHearAboutUs', '$targetFile')";
+
+            if (mysqli_query($connection, $sql)) {
+                $successMessage .= "Registration Successful";
+                header('Location: dashboard.php');
+            } else {
+                echo "Error: " . $sql . "<br>" . mysqli_error($connection);
+            }
+        } else {
+               $errorMessage .= "Error uploading file";
+        }
+    } else {
+      $errorMessage .= "File type not allowed";
+    }
+}
+
+?>
+
 
 <html lang="en">
 <head>
@@ -35,19 +94,19 @@
       <li class="nav-container">
        <span id="hoverer">Gallery</span> 
         <ul id="dropdown">
-            <li><a href="photos.html">Photos</a></li> 
-            <li><a href="videos.html">Videos</a></li> 
+            <li><a href="photos.php">Photos</a></li> 
+            <li><a href="videos.php">Videos</a></li> 
            </ul>
       </li>
-      <li><a href="updates.html">Updates</a></li>
+      <li><a href="updates.php">Updates</a></li>
       <li><a href="contact.html">Contact</a></li> 
       
     </ul>
     </div>
     <div class="h3">
        <ul>
-           <li><a href="login.html">Login</a></li> 
-           <li id="reg"> <a href="register.html">Register</a></li></ul>
+           <li><a href="login.php">Login</a></li> 
+           <li id="reg"> <a href="register.php">Register</a></li></ul>
     </div>
    </header>
    <aside> 
@@ -99,8 +158,8 @@
                     <a class="dropdown-item" onclick="toggleDropdown3()" >
                      Gallery +
                                                 <div class="sub-menu3" style="display: none;transition: 0.5s;background-color: #2e2e33">
-                          <a href="photos.html">Photos</a>
-                          <a href="videos.html">Videos</a>
+                          <a href="photos.php">Photos</a>
+                          <a href="videos.php">Videos</a>
                          </div>
                       </a>
                    
@@ -110,10 +169,10 @@
                           subMenu3.style.display = (subMenu3.style.display === 'none' || subMenu3.style.display === '') ? 'block' : 'none';
                         }
                       </script>
-         <a href="updates.html">updates</a>
+         <a href="updates.php">updates</a>
          <a href="contact.html">Contact Us</a>
-         <a href="login.html" >Sign In</a>
-           <a href="register.html">Sign UP</a>
+         <a href="login.php" >Sign In</a>
+           <a href="register.php">Sign UP</a>
        </div>
        <script>
        
@@ -142,18 +201,18 @@
 <h2>Registration</h2>
       </div>
       <div>
-      <form action="">
+      <form action="" method="post" enctype="multipart/form-data">
         <div>
           <label for="">Full Name</label><br>
-          <input type="text" name="" id="" >
+          <input type="text" name="FullName" id="" >
         </div>
         <div>
           <label for="">Email</label><br>
-          <input type="email" name="" id="" >
+          <input type="email" name="email" id="" >
         </div>
         <div>
           <label for="">Phone Number</label>
-          <input type="phone" name="" id="" >
+          <input type="tel" name="phone" id="" >
         </div>
         <div>
           <label for="">Are you an existing subscriber with Gudfama ?</label><br>
@@ -162,38 +221,20 @@
             <option value="No">No</option>
           </select>
         </div>
-        <!-- <div>
-          <label for="">Select a package you wish to invest in</label><br>
-          <select name="Package" id="">
- <option value="13,100 (10 Fishes)">13,100 (10 Fishes)</option>
-<option value="32,750 (25 Fishes)">32,750 (25 Fishes)</option>
-<option value="65,500 (50 Fishes)">65,500 (50 Fishes)</option>
-<option value="131,000 (100 Fishes)">131,000 (100 Fishes)</option>
-<option value="262,000 (200 Fishes)">262,000 (200 Fishes)</option>
-<option value="655,000 (500 Fishes)">655,000 (500 Fishes)</option>
-<option value="1,310,000 (1,000 Fishes)">1,310,000 (1,000 Fishes)</option>
-<option value="2,620,000 (2,000 Fishes)">2,620,000 (2,000 Fishes)</option>
-<option value="6,550,000 (5,000 Fishes)">6,550,000 (5,000 Fishes)</option>
-<option value="13,100,000 (10,000 Fishes)">13,100,000 (10,000 Fishes)</option>
-<option value="26,200,000 (20,000 Fishes)">26,200,000 (20,000 Fishes)</option>
-          </select>
-        </div> -->
-        <div>
-          <label for="">Date of Birth</label><br>
-          <input type="date" name="" id="">
-        </div>
     
         <div>
-          <label for="">Phone Number</label><br>
-          <input type="number" name="">
-        </div>        
+          <label for="">Date of Birth</label><br>
+          <input type="date" name="DOB" id="">
+        </div>
+    
+              
         <div>
           <label for="">State of Residence</label><br>
-          <input type="text" name="" id="" >
+          <input type="text" name="State_Of_Residence" id="" >
         </div>
         <div>
           <label for="">Set your password</label><br>
-          <input type="password" id="" >
+          <input type="password" id="" name="password" >
         </div>
         <div>
           <label for="">How did you hear About Us</label><br>
@@ -206,36 +247,10 @@
             <option value="Referral">Referral</option>
           </select>
         </div>
-        <!-- <div>
-          <label for="">Payment Plan</label><br>
-          <select name="Payment_plan" id="">
-            <option value="full_payment">Full Payment</option>
-            <option value="Weekly_Payment">Weekly Payment</option>
-            <option value="Monthly_Payment">Monthly Payment</option>
-            <option value="Daily_Payment">Daily Payment</option>
-          </select>
-        </div> -->
-        <!-- <div>
-          <label for="">Have you Made Payment </label><br>
-          <select name="Have you Made Payment " id="">
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-          </select>
-        </div>
-        <div>
-          <label for="">If Yes:  Amount Paid</label><br>
-          <input type="number" name="" id="">
-        </div>
-        <div>
-          <label for="">Upload proof of payment</label><br>
-          <input type="file" name="" id="">
-        </div>
-        <div>
-          <p><span style="color: #2CB67D;font-weight: bold;">Note</span>: If you have not made payment,on clicking the Register button you will be redirected to the online payment page to complete payment </p> 
-        </div> -->
+   
         <div>
           <label for="">Select Profile Picture</label><br>
-          <input type="file" name="image">
+          <input type="file" name="image" >
         </div>
         <div>
           <input type="submit" name="" id="submit" value="Register">
@@ -245,7 +260,7 @@
       </div>
      
     </main>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#128354" fill-opacity="1" d="M0,224L60,218.7C120,213,240,203,360,208C480,213,600,235,720,256C840,277,960,299,1080,282.7C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    <svg style="margin: 0px;"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#128354" fill-opacity="1" d="M0,224L60,218.7C120,213,240,203,360,208C480,213,600,235,720,256C840,277,960,299,1080,282.7C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
     
     <footer>
       <div class="foot">
@@ -256,10 +271,10 @@
         <div class="f2">
           <h3>Quick links</h3>
          <p><i class="fa-solid fa-arrow-right"></i><a href="index.html">Home</a></p> 
-         <p><i class="fa-solid fa-arrow-right"></i><a href="updates.html">Updates</a></p> 
+         <p><i class="fa-solid fa-arrow-right"></i><a href="updates.php">Updates</a></p> 
          <p><i class="fa-solid fa-arrow-right"></i><a href="contact.html">Contact</a></p> 
-         <p><i class="fa-solid fa-arrow-right"></i><a href="login.html">Dashboard</a></p> 
-         <p><i class="fa-solid fa-arrow-right"></i><a href="register.html">Register</a></p> 
+         <p><i class="fa-solid fa-arrow-right"></i><a href="login.php">Dashboard</a></p> 
+         <p><i class="fa-solid fa-arrow-right"></i><a href="register.php">Register</a></p> 
         </div>
         <div class="f2">
           <h3>Company</h3>
@@ -294,5 +309,63 @@
       </div>
       </div>
     </footer>
+        <!-- <div>
+          <label for="">Select a package you wish to invest in</label><br>
+          <select name="Package" id="">
+ <option value="13,100 (10 Fishes)">13,100 (10 Fishes)</option>
+<option value="32,750 (25 Fishes)">32,750 (25 Fishes)</option>
+<option value="65,500 (50 Fishes)">65,500 (50 Fishes)</option>
+<option value="131,000 (100 Fishes)">131,000 (100 Fishes)</option>
+<option value="262,000 (200 Fishes)">262,000 (200 Fishes)</option>
+<option value="655,000 (500 Fishes)">655,000 (500 Fishes)</option>
+<option value="1,310,000 (1,000 Fishes)">1,310,000 (1,000 Fishes)</option>
+<option value="2,620,000 (2,000 Fishes)">2,620,000 (2,000 Fishes)</option>
+<option value="6,550,000 (5,000 Fishes)">6,550,000 (5,000 Fishes)</option>
+<option value="13,100,000 (10,000 Fishes)">13,100,000 (10,000 Fishes)</option>
+<option value="26,200,000 (20,000 Fishes)">26,200,000 (20,000 Fishes)</option>
+          </select>
+        </div> -->
+
+             <!-- <div>
+          <label for="">Payment Plan</label><br>
+          <select name="Payment_plan" id="">
+            <option value="full_payment">Full Payment</option>
+            <option value="Weekly_Payment">Weekly Payment</option>
+            <option value="Monthly_Payment">Monthly Payment</option>
+            <option value="Daily_Payment">Daily Payment</option>
+          </select>
+        </div> -->
+        <!-- <div>
+          <label for="">Have you Made Payment </label><br>
+          <select name="Have you Made Payment " id="">
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div>
+          <label for="">If Yes:  Amount Paid</label><br>
+          <input type="number" name="" id="">
+        </div>
+        <div>
+          <label for="">Upload proof of payment</label><br>
+          <input type="file" name="" id="">
+        </div>
+        <div>
+          <p><span style="color: #2CB67D;font-weight: bold;">Note</span>: If you have not made payment,on clicking the Register button you will be redirected to the online payment page to complete payment </p> 
+        </div> -->
+
+          <?php
+        if ($errorMessage !== '') {
+            echo '<div style="color: red;text-align:center; position: fixed;
+            bottom: 5%;
+            right: 5% ;background-color:black;padding:20px">' . $errorMessage . '</div>';
+        }
+
+        if ($successMessage !== '') {
+            echo '<div style="color: #2CB67D;text-align:center; position: fixed;
+            bottom: 5%;
+            right: 5% ;background-color:black;padding:20px" >' . $successMessage . '</div>';
+        }
+    ?>
 </body>
 </html>
