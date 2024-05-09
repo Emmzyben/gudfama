@@ -5,16 +5,14 @@ $username = "root";
 $password = "";
 $database = "gudfama";
 
-// Create a database connection
 $connection = mysqli_connect($servername, $username, $password, $database);
 
-// Check the connection
 if (!$connection) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-$errorMessage = ''; 
-$successMessage = ''; 
+$errorMessage = '';
+$successMessage ='';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $fullName = $_POST['FullName'];
@@ -26,37 +24,64 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
     $howDidYouHearAboutUs = $_POST['How_did_you_hear_About_Us'];
 
-    // File upload
-    $targetDir = "uploads/";
-    $targetFile = $targetDir . basename($_FILES["image"]["name"]);
-    $fileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
-
-    // Allow certain file formats
-    $allowedTypes = array('jpg', 'jpeg', 'png', 'gif');
-
-    if (in_array($fileType, $allowedTypes)) {
-        // Upload file
-        if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
-            // Insert data into database
-            $sql = "INSERT INTO users (full_name, email, phone, subscription, dob, state_of_residence, password, how_did_you_hear_about_us, profile_picture) 
-                    VALUES ('$fullName', '$email', '$phone', '$subscription', '$dob', '$stateOfResidence', '$password', '$howDidYouHearAboutUs', '$targetFile')";
-
-            if (mysqli_query($connection, $sql)) {
-                $successMessage .= "Registration Successful";
-                header('Location: dashboard.php');
-            } else {
-                echo "Error: " . $sql . "<br>" . mysqli_error($connection);
-            }
-        } else {
-               $errorMessage .= "Error uploading file";
-        }
+    if (empty($fullName) || empty($email) || empty($phone) || empty($dob) || empty($stateOfResidence) || empty($password) || empty($howDidYouHearAboutUs)) {
+        $errorMessage = "All fields are required.";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errorMessage = "Invalid email format.";
+    } elseif (!preg_match("/^(?=.*[A-Z])(?=.*\d).{8,}$/", $password)) {
+        $errorMessage = "Password must be at least 8 characters long and contain at least one capital letter and one number.";
     } else {
-      $errorMessage .= "File type not allowed";
+        $checkQuery = "SELECT * FROM users WHERE email=? OR phone=?";
+        $checkStmt = mysqli_prepare($connection, $checkQuery);
+        mysqli_stmt_bind_param($checkStmt, "ss", $email, $phone);
+        mysqli_stmt_execute($checkStmt);
+        mysqli_stmt_store_result($checkStmt);
+
+        if (mysqli_stmt_num_rows($checkStmt) > 0) {
+            $errorMessage = "User with this email or phone number already exists.";
+        } else {
+            $targetDir = "uploads/";
+            if (!file_exists($targetDir)) {
+                mkdir($targetDir, 0777, true);
+            }
+
+            $targetFile = $targetDir . basename($_FILES["image"]["name"]);
+            $fileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+
+            $allowedTypes = array('jpg', 'jpeg', 'png', 'gif');
+
+            if (in_array($fileType, $allowedTypes)) {
+                if (file_exists($targetFile)) {
+                    $errorMessage = "Profile picture already exists.";
+                } else {
+                    if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
+                       
+                        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+                       
+                        $sql = "INSERT INTO users (full_name, email, phone, subscription, dob, state_of_residence, password, how_did_you_hear_about_us, profile_picture) 
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        $stmt = mysqli_prepare($connection, $sql);
+                        mysqli_stmt_bind_param($stmt, "sssssssss", $fullName, $email, $phone, $subscription, $dob, $stateOfResidence, $hashedPassword, $howDidYouHearAboutUs, $targetFile);
+
+                        if (mysqli_stmt_execute($stmt)) {
+                            $successMessage = "Registration Successful! Redirecting...";
+                            header("refresh:3; url=dashboard.php");
+                        } else {
+                            $errorMessage = "Error: " . mysqli_error($connection);
+                        }
+                    } else {
+                        $errorMessage = "Error uploading file";
+                    }
+                }
+            } else {
+                $errorMessage = "File type not allowed";
+            }
+        }
     }
 }
 
 ?>
-
 
 <html lang="en">
 <head>
@@ -68,7 +93,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="shortcut icon" href="images/logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://kit.fontawesome.com/f0fb58e769.js" crossorigin="anonymous"></script>
-</head>
+ 
+  </head>
 <body>
   <header>
     <div class="h1">
@@ -80,7 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
        <li class="nav-container">
            <span id="hoverer">About</span> 
             <ul id="dropdown">
-             <li><a href="about.html">Company Profile</a></li> 
+             <li><a href="about.html">Who we are</a></li> 
              <li><a href="staff.html">Our Team</a></li> 
             </ul>
            </li>
@@ -130,7 +156,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                About Us +
                   <div class="sub-menu1" style="display: none;transition: 0.5s;background-color: #2e2e33;
                   color: #fff;">
-                 <a href="about.html">Company profile</a>
+                 <a href="about.html">Who we are</a>
                  <a href="staff.html">Our Team</a>
                   </div>
                 </a>
@@ -201,7 +227,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <h2>Registration</h2>
       </div>
       <div>
-      <form action="" method="post" enctype="multipart/form-data">
+      <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
+
         <div>
           <label for="">Full Name</label><br>
           <input type="text" name="FullName" id="" >
@@ -253,7 +280,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <input type="file" name="image" >
         </div>
         <div>
-          <input type="submit" name="" id="submit" value="Register">
+           <input type="submit" name="" id="submit" value="Register">
         </div>
       </form>
     </div>
@@ -262,29 +289,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </main>
     <svg style="margin: 0px;"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#128354" fill-opacity="1" d="M0,224L60,218.7C120,213,240,203,360,208C480,213,600,235,720,256C840,277,960,299,1080,282.7C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
     
+   
+
     <footer>
       <div class="foot">
         <div class="f1">
           <h3>About Us</h3>
       <p style="line-height: 23px;">GUDFAMA, a subsidiary of Business Gladius Africa (BGA), was established to address Nigeria and Africa's food crisis caused by rural-urban migration. Born in 2014, BGA has worked as a manufacturer's representative and marketing service provider, focusing on SMEs. In 2025, it expanded its efforts into the agribusiness sector with GUDFAMA.</p>
      </div>
-        <div class="f2">
-          <h3>Quick links</h3>
-         <p><i class="fa-solid fa-arrow-right"></i><a href="index.html">Home</a></p> 
-         <p><i class="fa-solid fa-arrow-right"></i><a href="updates.php">Updates</a></p> 
-         <p><i class="fa-solid fa-arrow-right"></i><a href="contact.html">Contact</a></p> 
-         <p><i class="fa-solid fa-arrow-right"></i><a href="login.php">Dashboard</a></p> 
-         <p><i class="fa-solid fa-arrow-right"></i><a href="register.php">Register</a></p> 
-        </div>
-        <div class="f2">
-          <h3>Company</h3>
-        <p><i class="fa-solid fa-arrow-right"></i><a href="about.html">Company Profile</a></p>  
-        <p><i class="fa-solid fa-arrow-right"></i><a href="staff.html">Our Team</a></p>  
-        <p><i class="fa-solid fa-arrow-right"></i><a href="services.html">Our Services</a></p>  
-        <p><i class="fa-solid fa-arrow-right"></i><a href="products.html">Our Products</a></p>  
-        </div>
-        <div class="f1">
-          <h3>Have a Question?</h3>
+      <div class="f1">
+          <h3>Contact Us</h3>
           <p><b> <i class="fa fa-map-marker" style=" font-size:20px;color:#2CB67D;padding-right: 10px"></i>Farm:</b>o. 24 APA mini Street Off Y Junction,
             Miniorlu Ada-George.                                                                                                                             
           </p>
@@ -297,6 +311,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <p><p><i class="fa fa-envelope" style="font-size:15px;color:#2CB67D;padding-right: 10px;"></i><b>Email:</b> info@gudfama.com
           </p>
         </div>
+        <div class="f2">
+          <h3>Quick links</h3>
+         <p><i class="fa-solid fa-arrow-right"></i><a href="index.html">Home</a></p> 
+         <p><i class="fa-solid fa-arrow-right"></i><a href="updates.php">Updates</a></p> 
+         <p><i class="fa-solid fa-arrow-right"></i><a href="contact.html">Contact</a></p> 
+         <p><i class="fa-solid fa-arrow-right"></i><a href="login.php">Dashboard</a></p> 
+         <p><i class="fa-solid fa-arrow-right"></i><a href="register.php">Register</a></p> 
+        </div>
+        <div class="f2">
+          <h3>Company</h3>
+        <p><i class="fa-solid fa-arrow-right"></i><a href="about.html">Who we are</a></p>  
+        <p><i class="fa-solid fa-arrow-right"></i><a href="staff.html">Our Team</a></p>  
+        <p><i class="fa-solid fa-arrow-right"></i><a href="services.html">Our Services</a></p>  
+        <p><i class="fa-solid fa-arrow-right"></i><a href="products.html">Our Products</a></p>  
+        </div>
+       
       </div>
       <div class="socials">
         <p>Copyright 2024 Gudfama.com</p>
@@ -354,18 +384,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <p><span style="color: #2CB67D;font-weight: bold;">Note</span>: If you have not made payment,on clicking the Register button you will be redirected to the online payment page to complete payment </p> 
         </div> -->
 
-          <?php
-        if ($errorMessage !== '') {
-            echo '<div style="color: red;text-align:center; position: fixed;
+        <?php
+if ($errorMessage !== '') {
+    echo '<div id="errorMessage" style="color: red;text-align:center; position: fixed;
             bottom: 5%;
-            right: 5% ;background-color:black;padding:20px">' . $errorMessage . '</div>';
-        }
+            right: 1% ;;padding:20px">' . $errorMessage . '</div>';
+}
 
-        if ($successMessage !== '') {
-            echo '<div style="color: #2CB67D;text-align:center; position: fixed;
+if ($successMessage !== '') {
+    echo '<div id="successMessage" style="color: #2CB67D;text-align:center; position: fixed;
             bottom: 5%;
-            right: 5% ;background-color:black;padding:20px" >' . $successMessage . '</div>';
-        }
-    ?>
+            right: 1% ;:black;padding:20px" >' . $successMessage . '</div>';
+}
+?>
+
+<script>
+    // Function to hide error and success messages after 3 seconds
+    setTimeout(function() {
+        document.getElementById("errorMessage").style.display = "none";
+        document.getElementById("successMessage").style.display = "none";
+    }, 2000);
+</script>
+<script src="index.js"></script>
 </body>
 </html>

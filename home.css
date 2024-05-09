@@ -107,7 +107,7 @@ svg{
 margin: 30px;
 }
 #hero2 img{
-  width: 100%;border: 6px solid #2CB67D;
+  width: 100%;border: 6px solid #c9ecde;
   height: 300px;clip-path: polygon(20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%);;
 }
 .he2{

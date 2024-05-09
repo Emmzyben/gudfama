@@ -17,3 +17,4 @@ document.addEventListener("DOMContentLoaded", function(event) {
     var div = document.getElementById('div' + id);
     div.classList.toggle('show');
   }
+

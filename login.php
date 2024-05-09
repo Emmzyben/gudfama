@@ -1,51 +1,58 @@
-
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 
-$DATABASE_HOST = 'localhost';
-$DATABASE_USER = 'root';
-$DATABASE_PASS = '';
-$DATABASE_NAME = 'afaranew';
-
-$con = mysqli_connect($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME);
-if (mysqli_connect_errno()) {
-    exit('Failed to connect to MySQL: ' . mysqli_connect_error());
-}
-$errorMessage = ''; 
-$successMessage = ''; 
 session_start();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+$servername = 'localhost';
+$username = "root";
+$password = "";
+$database = "gudfama";
+
+// Create a database connection
+$connection = mysqli_connect($servername, $username, $password, $database);
+
+// Check the connection
+if (!$connection) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+
+$errorMessage = '';
+$successMessage ='';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    $stmt = $con->prepare('SELECT user_id, password FROM users WHERE email = ?');
-    $stmt->bind_param('s', $email);
-    $stmt->execute();
-    $stmt->store_result();
-
-    if ($stmt->num_rows > 0) {
-        $stmt->bind_result($user_id, $hashed_password);
-        $stmt->fetch();
-
-        if (password_verify($password, $hashed_password)) {
-            // Password is correct, so start a new session
-            session_regenerate_id();
-            $_SESSION['loggedin'] = TRUE;
-            $_SESSION['user_id'] = $user_id;
-            header('Location: dashboard.php');
-            exit;
-        } else {
-            $errorMessage .= "Incorrect Email and/or password!";
-        }
+    // Input validation
+    if (empty($email) || empty($password)) {
+        $errorMessage = "Email and password are required.";
     } else {
-      $errorMessage .= "Incorrect Email and/or password!";
-    }
+        // Check if user exists
+        $checkQuery = "SELECT * FROM users WHERE email=?";
+        $checkStmt = mysqli_prepare($connection, $checkQuery);
+        mysqli_stmt_bind_param($checkStmt, "s", $email);
+        mysqli_stmt_execute($checkStmt);
+        $result = mysqli_stmt_get_result($checkStmt);
 
-    $stmt->close();
+        if (mysqli_num_rows($result) == 1) {
+            $user = mysqli_fetch_assoc($result);
+            if (password_verify($password, $user['password'])) {
+                // Password is correct, start a session
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['user_email'] = $user['email'];
+                $_SESSION['user_full_name'] = $user['full_name'];
+                header("refresh:3; url=dashboard.php");
+                exit();
+            } else {
+                $errorMessage = "Incorrect password.";
+            }
+        } else {
+            $errorMessage = "User with this email does not exist.";
+        }
+    }
 }
+
 ?>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -73,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
        <li class="nav-container">
            <span id="hoverer">About</span> 
             <ul id="dropdown">
-             <li><a href="about.html">Company Profile</a></li> 
+             <li><a href="about.html">Who we are</a></li> 
              <li><a href="staff.html">Our Team</a></li> 
             </ul>
            </li>
@@ -123,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                About Us +
                   <div class="sub-menu1" style="display: none;transition: 0.5s;background-color: #2e2e33;
                   color: #fff;">
-                 <a href="about.html">Company profile</a>
+                 <a href="about.html">Who we are</a>
                  <a href="staff.html">Our Team</a>
                   </div>
                 </a>
@@ -196,7 +203,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
        </div>
        
           <div id="apply">
-            <form action="" id="form" method="post">
+          <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" id="form">
+
               <input type="email" name="email" id="email" placeholder="Email or Phone"><br>
               <input type="password" name="password" id="password" placeholder="Password"><br>
               <a href="forgot.html">Forgot Password?</a><br>
@@ -246,18 +254,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       
     <footer></footer>
     <?php
-        if ($errorMessage !== '') {
-            echo '<div style="color: red;text-align:center; position: fixed;
+if ($errorMessage !== '') {
+    echo '<div id="errorMessage" style="color: red;text-align:center; position: fixed;
             bottom: 5%;
-            right: 5% ;background-color:black;padding:20px">' . $errorMessage . '</div>';
-        }
+            right: 1% ;padding:20px">' . $errorMessage . '</div>';
+}
 
-        if ($successMessage !== '') {
-            echo '<div style="color: #2CB67D;text-align:center; position: fixed;
+if ($successMessage !== '') {
+    echo '<div id="successMessage" style="color: #2CB67D;text-align:center; position: fixed;
             bottom: 5%;
-            right: 5% ;background-color:black;padding:20px" >' . $successMessage . '</div>';
-        }
-    ?>
+            right: 1% ;padding:20px" >' . $successMessage . '</div>';
+}
+?>
+
+<script>
+    // Function to hide error and success messages after 3 seconds
+    setTimeout(function() {
+        document.getElementById("errorMessage").style.display = "none";
+        document.getElementById("successMessage").style.display = "none";
+    }, 2000);
+</script>
      <div id="box" style="color:white;text-align:center; position: fixed;
             bottom: 5%;
             right: 5% ;;padding:20px" ></div>
