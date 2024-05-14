@@ -18,13 +18,13 @@ if (!isset($_SESSION['user_id'])) {
     <link rel="stylesheet" href="dash.css">
 </head>
 <body>
-    <div id="container">
+    <!-- <div id="container">
 <div id="wait">
         <h4>Welcome</h4>
         <p>Please wait..</p>
         <div class="circle"></div>
     </div>
-</div>
+</div> -->
 
 <div id="dashboard" style="display:block">
     
@@ -157,7 +157,7 @@ if (!isset($_SESSION['user_id'])) {
 
 
 <!-- invest methods -->
-<a>
+<a href="#">
     
     <div><img src="images/invest.png" alt="">
 <h3>Invest</h3>
@@ -168,7 +168,7 @@ if (!isset($_SESSION['user_id'])) {
 </a>
 
 
-<a>
+<a href="#">
     
     <div><img src="images/invite.png" alt="">
 <h3>Invite to register</h3>
@@ -181,13 +181,29 @@ if (!isset($_SESSION['user_id'])) {
 
 
 
+</div>
 
-
-
-
-
-
-
+<div id="downNav">
+  <a>
+    <i><i class="fa-solid fa-house"></i></i>
+    <p>Homepage</p>
+  </a>
+  <a>
+  <i class="fa-solid fa-file-invoice"></i>
+   <p>Account</p> 
+  </a>
+  <a id="mid">
+  <i class="fa-solid fa-sack-dollar"></i>
+   <p> Invest</p>
+  </a>
+  <a>
+  <i class="fa-solid fa-user"></i>
+   <p>Profile</p>  
+  </a>
+  <a>
+  <i class="fa-solid fa-right-from-bracket"></i>
+   <p>Logout</p>
+  </a>
 </div>
 
 
@@ -195,9 +211,7 @@ if (!isset($_SESSION['user_id'])) {
 
 
 
-
-
-    <script>
+    <!-- <script>
     document.addEventListener("DOMContentLoaded", function(event) {
         var waitDiv = document.getElementById('container');
         var dashboard =document.getElementById('dashboard');
@@ -209,6 +223,6 @@ if (!isset($_SESSION['user_id'])) {
         }, 4000); 
         
     });
-</script>
+</script> -->
 </body>
 </html>
