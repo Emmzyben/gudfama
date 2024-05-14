@@ -15,7 +15,7 @@ if (!isset($_SESSION['user_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard</title>
     <script src="https://kit.fontawesome.com/f0fb58e769.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="dash.css">
+    <link rel="stylesheet" href="dash1.css">
 </head>
 <body>
     <!-- <div id="container">
