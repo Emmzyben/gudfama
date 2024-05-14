@@ -18,13 +18,13 @@ if (!isset($_SESSION['user_id'])) {
     <link rel="stylesheet" href="dash.css">
 </head>
 <body>
-    <!-- <div id="container">
+    <div id="container">
 <div id="wait">
         <h4>Welcome</h4>
         <p>Please wait..</p>
         <div class="circle"></div>
     </div>
-</div> -->
+</div>
 
 <div id="dashboard" style="display:block">
     
@@ -197,7 +197,7 @@ if (!isset($_SESSION['user_id'])) {
 
 
 
-    <!-- <script>
+    <script>
     document.addEventListener("DOMContentLoaded", function(event) {
         var waitDiv = document.getElementById('container');
         var dashboard =document.getElementById('dashboard');
@@ -209,6 +209,6 @@ if (!isset($_SESSION['user_id'])) {
         }, 4000); 
         
     });
-</script> -->
+</script>
 </body>
 </html>
