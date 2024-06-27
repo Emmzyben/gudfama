@@ -1,0 +1,27 @@
+table,tr,td{
+    border-bottom: 1px solid rgb(207, 206, 206);
+    width: 80%;
+    padding: 10px;
+}
+.account h3{
+    padding-left: 20px;
+}
+
+.form{
+    display: flex;
+    flex-direction: row;border-radius: 10px;
+    flex-wrap: wrap;border: 1px solid rgb(207, 206, 206);
+}
+.form>div{
+    border-bottom: 1px solid rgb(207, 206, 206);
+    width: 47%;padding: 5px;
+}
+.form select{
+    padding: 10px;border: none;
+}
+#label{
+    font-size: 13px;
+}
+#subm{
+    margin-top:10px;background-color: #2CB67D;color:white;padding: 10px;border-radius: 10px;border: none;
+}

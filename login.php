@@ -1,11 +1,10 @@
 <?php
-
 session_start();
 
-$servername = 'localhost';
-$username = "root";
-$password = "";
-$database = "gudfama";
+$servername = 'sdb-72.hosting.stackcp.net';
+$username = "gudfama";
+$password = "Nikido886@";
+$database = "gudfama-35303631fafd";
 
 // Create a database connection
 $connection = mysqli_connect($servername, $username, $password, $database);
@@ -16,43 +15,39 @@ if (!$connection) {
 }
 
 $errorMessage = '';
-$successMessage ='';
+$successMessage = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
+    $emailOrPhone = $_POST['email_or_phone'];
     $password = $_POST['password'];
 
     // Input validation
-    if (empty($email) || empty($password)) {
-        $errorMessage = "Email and password are required.";
+    if (empty($emailOrPhone) || empty($password)) {
+        $errorMessage = "Email/Phone and password are required.";
     } else {
-        // Check if user exists
-        $checkQuery = "SELECT * FROM users WHERE email=?";
+        // Check if user exists with email or phone
+        $checkQuery = "SELECT * FROM users WHERE email=? OR phone=?";
         $checkStmt = mysqli_prepare($connection, $checkQuery);
-        mysqli_stmt_bind_param($checkStmt, "s", $email);
+        mysqli_stmt_bind_param($checkStmt, "ss", $emailOrPhone, $emailOrPhone);
         mysqli_stmt_execute($checkStmt);
         $result = mysqli_stmt_get_result($checkStmt);
 
         if (mysqli_num_rows($result) == 1) {
             $user = mysqli_fetch_assoc($result);
             if (password_verify($password, $user['password'])) {
-                // Password is correct, start a session
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user_email'] = $user['email'];
-                $_SESSION['user_full_name'] = $user['full_name'];
-                header("refresh:3; url=dashboard.php");
+                header("Location: please_wait.php");
                 exit();
             } else {
                 $errorMessage = "Incorrect password.";
             }
         } else {
-            $errorMessage = "User with this email does not exist.";
+            $errorMessage = "User with this email or phone number does not exist.";
         }
     }
 }
-
 ?>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -67,6 +62,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     opacity: 0;
     transition: opacity 2s ease;
   }
+  /* @media screen and (max-width:700px) {
+    
+    .container{
+            position:absolute;
+            top:-70px;
+           }
+    } */
 </style>
   </head>
 <body>
@@ -205,9 +207,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <div id="apply">
           <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" id="form">
 
-              <input type="email" name="email" id="email" placeholder="Email or Phone"><br>
+          <input type="text" id="email_or_phone" name="email_or_phone" req><br>
               <input type="password" name="password" id="password" placeholder="Password"><br>
-              <a href="forgot.html">Forgot Password?</a><br>
+              <a href="forgot.php">Forgot Password?</a><br>
               <input type="submit" name="" id="submit"><br>
               <p style="text-align: center;color: white;">Not a member?<a href="register.php">Register Now!</a></p>
              
@@ -277,5 +279,18 @@ if ($successMessage !== '') {
      <div id="box" style="color:white;text-align:center; position: fixed;
             bottom: 5%;
             right: 5% ;;padding:20px" ></div>
+            <!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/66584e7a9a809f19fb36e559/1hv4f578f';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
 </body>
 </html>

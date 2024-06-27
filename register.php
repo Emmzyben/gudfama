@@ -1,30 +1,57 @@
 <?php
 
+session_start();
+
 $servername = 'localhost';
 $username = "root";
 $password = "";
 $database = "gudfama";
-
+// Establish connection
 $connection = mysqli_connect($servername, $username, $password, $database);
-
 if (!$connection) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
+$referralCode = isset($_GET['ref']) ? $_GET['ref'] : '';
+$referrerEmail = '';
+
+// If referral code is present, fetch the referrer's email
+if (!empty($referralCode)) {
+    $refQuery = "SELECT email FROM users WHERE referralLink=?";
+    $refStmt = mysqli_prepare($connection, $refQuery);
+    mysqli_stmt_bind_param($refStmt, "s", $referralCode);
+    mysqli_stmt_execute($refStmt);
+    mysqli_stmt_bind_result($refStmt, $referrerEmail);
+    mysqli_stmt_fetch($refStmt);
+    mysqli_stmt_close($refStmt);
+}
+
 $errorMessage = '';
-$successMessage ='';
+$successMessage = '';
+
+// Function to generate a random alphanumeric string
+function generateReferralCode() {
+    $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    $length = 10;
+    $referralCode = '';
+    for ($i = 0; $i < $length; $i++) {
+        $referralCode .= $characters[rand(0, strlen($characters) - 1)];
+    }
+    return $referralCode;
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $fullName = $_POST['FullName'];
     $email = $_POST['email'];
     $phone = $_POST['phone'];
+    $address = $_POST['address'];
     $subscription = $_POST['subscription'];
     $dob = $_POST['DOB'];
     $stateOfResidence = $_POST['State_Of_Residence'];
     $password = $_POST['password'];
     $howDidYouHearAboutUs = $_POST['How_did_you_hear_About_Us'];
 
-    if (empty($fullName) || empty($email) || empty($phone) || empty($dob) || empty($stateOfResidence) || empty($password) || empty($howDidYouHearAboutUs)) {
+    if (empty($fullName) || empty($email) || empty($phone) ||  empty($address) ||empty($dob) || empty($stateOfResidence) || empty($password) || empty($howDidYouHearAboutUs)) {
         $errorMessage = "All fields are required.";
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errorMessage = "Invalid email format.";
@@ -40,48 +67,160 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (mysqli_stmt_num_rows($checkStmt) > 0) {
             $errorMessage = "User with this email or phone number already exists.";
         } else {
-            $targetDir = "uploads/";
-            if (!file_exists($targetDir)) {
-                mkdir($targetDir, 0777, true);
+            $targetFile = "";
+            if (!empty($_FILES["image"]["name"])) {
+                $targetDir = "uploads/";
+                if (!file_exists($targetDir)) {
+                    mkdir($targetDir, 0777, true);
+                }
+                $targetFile = $targetDir . basename($_FILES["image"]["name"]);
+                $fileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+                $allowedTypes = array('jpg', 'jpeg', 'png', 'gif');
+                if (in_array($fileType, $allowedTypes)) {
+                    if (file_exists($targetFile)) {
+                        $errorMessage = "Profile picture already exists.";
+                    } else {
+                        if (!move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
+                            $errorMessage = "Error uploading image";
+                        }
+                    }
+                } else {
+                    $errorMessage = "Please upload a valid image file";
+                }
             }
 
-            $targetFile = $targetDir . basename($_FILES["image"]["name"]);
-            $fileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+            $referralCode = generateReferralCode();
+            $referralLink = "http://gudfama.com/register.php?ref=$referralCode";
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-            $allowedTypes = array('jpg', 'jpeg', 'png', 'gif');
+            $sql = "INSERT INTO users (full_name, email, phone, subscription, dob, state_of_residence, password, how_did_you_hear_about_us, profile_picture, referralLink, address) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmt = mysqli_prepare($connection, $sql);
+            mysqli_stmt_bind_param($stmt, "sssssssssss", $fullName, $email, $phone, $subscription, $dob, $stateOfResidence, $hashedPassword, $howDidYouHearAboutUs, $targetFile, $referralLink, $address);
+            if (mysqli_stmt_execute($stmt)) {
+                $userId = mysqli_insert_id($connection);
+                $_SESSION['user_id'] = $userId;
+                $_SESSION['user_email'] = $email;
+                $_SESSION['user_full_name'] = $fullName;
 
-            if (in_array($fileType, $allowedTypes)) {
-                if (file_exists($targetFile)) {
-                    $errorMessage = "Profile picture already exists.";
-                } else {
-                    if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
-                       
-                        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-                       
-                        $sql = "INSERT INTO users (full_name, email, phone, subscription, dob, state_of_residence, password, how_did_you_hear_about_us, profile_picture) 
-                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                        $stmt = mysqli_prepare($connection, $sql);
-                        mysqli_stmt_bind_param($stmt, "sssssssss", $fullName, $email, $phone, $subscription, $dob, $stateOfResidence, $hashedPassword, $howDidYouHearAboutUs, $targetFile);
-
-                        if (mysqli_stmt_execute($stmt)) {
-                            $successMessage = "Registration Successful! Redirecting...";
-                            header("refresh:3; url=dashboard.php");
-                        } else {
-                            $errorMessage = "Error: " . mysqli_error($connection);
-                        }
-                    } else {
-                        $errorMessage = "Error uploading file";
-                    }
+                if (!empty($referrerEmail)) {
+                    $referralInsert = "INSERT INTO referrals (referrer_email, referred_email, referred_name, referred_phone) 
+                                       VALUES (?, ?, ?, ?)";
+                    $referralStmt = mysqli_prepare($connection, $referralInsert);
+                    mysqli_stmt_bind_param($referralStmt, "ssss", $referrerEmail, $email, $fullName, $phone);
+                    mysqli_stmt_execute($referralStmt);
+                    mysqli_stmt_close($referralStmt);
                 }
+               sendWelcomeEmail($fullName, $email);
+                header("Location: please_wait.php");
+                exit;
             } else {
-                $errorMessage = "File type not allowed";
+                $errorMessage = "Error: " . mysqli_error($connection);
             }
         }
     }
 }
+function sendWelcomeEmail($fullName, $email) {
+    require 'PHPMailer/PHPMailer.php';
+    require 'PHPMailer/Exception.php';
+    require 'PHPMailer/SMTP.php';
+
+    $mail = new PHPMailer\PHPMailer\PHPMailer(true);
+
+    try {
+        $mail->SMTPDebug = 0;  
+        $mail->isSMTP();
+        $mail->Host = 'smtp-relay.brevo.com';  
+        $mail->SMTPAuth = true;
+        $mail->Username = '7616e4002@smtp-brevo.com';
+        $mail->Password = '1qzVSdU0I5KsQ24p';
+        $mail->SMTPSecure = 'tls';
+        $mail->Port = 587;
+
+        // Recipients
+        $mail->setFrom('info@gudfama.com', 'Gudfama');
+        $mail->addAddress($email, $fullName);
+        $mail->addReplyTo('info@gudfama.com', 'Gudfama');
+
+        // Content
+        $mail->isHTML(true);
+        $mail->Subject = 'Welcome to Gudfama';
+        $mail->Body    = '
+        <html>
+        <head>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    background-color: #fff;
+                    margin: 0;
+                    padding: 0;
+                }
+                .container {
+                    max-width: 600px;
+                    margin: 0 auto;
+                    padding: 20px;
+                    background-color: #ffffff;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                }
+                .header {
+                    background-color: #2CB67D;
+                    color: white;
+                    padding: 10px 0;
+                    text-align: center;
+                }
+                .content {
+                    padding: 20px;
+                }
+                .footer {
+                    background-color: #2CB67D;
+                    color: white;
+                    text-align: center;
+                    padding: 10px 0;
+                    margin-top: 20px;
+                }
+                .footer>p>span{
+                    background-color:white;color:black;padding:6px;
+                    }
+                h1 {
+                    color: #333333;
+                }
+                p {
+                    line-height: 1.6;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <h1>Welcome to Gudfama</h1>
+                </div>
+                <div class="content">
+                    <p>Dear ' . htmlspecialchars($fullName) . ',</p>
+                    <p>We at Gudfama heartily congratulate you on starting your farming journey with Gudfama.</p>
+                    <p>To continue, log in to your dashboard and enter your preferred bank account details in the accounts page. Then head to the Farm page to start your farming.</p>
+                    <p>If you need any assistance, our customer care representatives are always online to sort all your needs.</p>
+                    <p>Best regards,<br>Gudfama Team</p>
+                </div>
+                <div class="footer">
+                    <p><span>Powered By:</span> Business Gladius Africa, Gladius Urban Farm Africa and Gudbud</p>
+                <p> +2348069902316 | +2348143507908</p>
+                </div>
+            </div>
+        </body>
+        </html>';
+
+        $mail->send();
+    } catch (Exception $e) {
+        error_log("Email sending failed: " . $mail->ErrorInfo);
+    }
+}
+
 
 ?>
+
+
+
+
 
 <html lang="en">
 <head>
@@ -93,7 +232,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="shortcut icon" href="images/logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://kit.fontawesome.com/f0fb58e769.js" crossorigin="anonymous"></script>
- 
+  <style>
+      div{
+         opacity: 0;
+         transform: translateY(20px);
+         transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+       }
+
+       div.visible {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ </style>
+  <style>
+    @media screen and (max-width:700px) {
+    
+    .container{
+            position:absolute;
+            top:-70px;
+           }
+    }
+ </style>
   </head>
 <body>
   <header>
@@ -241,6 +400,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <input type="tel" name="phone" id="phone" value="<?php if(isset($_POST['phone'])) echo $_POST['phone']; ?>" required>
     </div>
     <div>
+      <label for="text">Address</label><br>
+      <input type="tel" name="address" id="address" value="<?php if(isset($_POST['address'])) echo $_POST['address']; ?>" required>
+    </div>
+    <div>
       <label for="subscription">Are you an existing subscriber with Gudfama?</label><br>
       <select name="subscription" id="subscription" required>
         <option value="">Select option</option>
@@ -272,9 +435,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <option value="Referral" <?php if(isset($_POST['How_did_you_hear_About_Us']) && $_POST['How_did_you_hear_About_Us'] == 'Referral') echo 'selected'; ?>>Referral</option>
       </select>
     </div>
+    
     <div>
-      <label for="image">Select Profile Picture</label><br>
-      <input type="file" name="image" id="image" accept="image/*" required>
+      <label for="image">Select Profile Picture (Optional)</label><br>
+      <input type="file" name="image"  accept="image/*">
     </div>
     <div>
       <input type="submit" value="Register" id="submit">
@@ -299,8 +463,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <p><b> <i class="fa fa-map-marker" style=" font-size:20px;color:#2CB67D;padding-right: 10px"></i>Farm:</b>o. 24 APA mini Street Off Y Junction,
             Miniorlu Ada-George.                                                                                                                             
           </p>
-          <p><b> <i class="fa fa-map-marker" style=" font-size:20px;color:#2CB67D;padding-right: 10px"></i>Office:</b> Castel Resources No. 99 Olu-Obasanjo
-            New Phrase 1, Port Harcourt, Rivers State.
+          <p><b> <i class="fa fa-map-marker" style=" font-size:20px;color:#2CB67D;padding-right: 10px"></i>Office:</b>  13 Rumuodaolu Market Road, Off Rumuola Road, Port Port-Harcourt
                                                                                                                                        
           </p>
           <p><b><i class="fa fa-phone" style="font-size:15px;color:#2CB67D;padding-right: 10px;"></i>Telephone:</b> 07042715386, 08069902316
@@ -403,5 +566,39 @@ if ($successMessage !== '') {
     }, 2000);
 </script>
 <script src="index.js"></script>
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+  const sections = document.querySelectorAll('div');
+
+  const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+          if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+          } else {
+              entry.target.classList.remove('visible');
+          }
+      });
+  }, {
+      threshold: 0.1
+  });
+
+  sections.forEach(section => {
+      observer.observe(section);
+  });
+});
+    </script>
+    <!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/66584e7a9a809f19fb36e559/1hv4f578f';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
 </body>
 </html>

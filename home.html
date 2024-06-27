@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maintenance Mode</title>
+    <link rel="shortcut icon" href="images/logo.png">
+    <script src="https://kit.fontawesome.com/f0fb58e769.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="dashy.css">
+    <style>
+        #wait{
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    justify-content: center;
+    padding-top: 10%;
+}
+.circle {
+width: 20px;
+height: 20px;
+border: 10px solid grey;
+border-top-color: green;
+border-radius: 50%;
+animation: spin 2s linear infinite;
+}
+
+
+@keyframes spin {
+0% {
+transform: rotate(0deg);
+}
+100% {
+transform: rotate(360deg);
+}
+}
+
+    </style>
+    <!-- <script>
+        setTimeout(function(){
+            window.location.href = "user_dashboard/dashboard.php";
+        }, 4000); 
+    </script> -->
+</head>
+<body>
+    <div id="container">
+        <div id="wait">
+            <h4>Maintenance ongoing...</h4>
+            <p>Please check back later</p>
+            <p>We apologize for the inconvenience</p>
+            <div class="circle"></div>
+        </div>
+    </div>
+</body>
+</html>

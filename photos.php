@@ -1,3 +1,39 @@
+<?php
+$servername = 'localhost';
+$username = "root";
+$password = "";
+$database = "gudfama";
+
+$conn = new mysqli($servername, $username, $password, $database);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Modify the SQL query to only select entries with the category 'picture'
+$sql = "SELECT description, file FROM gallery WHERE category = 'picture' ORDER BY post_date DESC";
+$result = $conn->query($sql);
+
+$html = '';
+
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $picture_path = $row['file'];
+        $description = $row['description'];
+
+        $html .= '<div class="image-container" style="border:1px solid #e4e4e4;border-radius:10px;">';
+        $html .= '<img src="adminPage/' . $picture_path . '" style="height: 300px; width: 100%;">';
+        $html .= '<p style="margin-top:20px;text-align:center"><b>' . $description . '</b></p>';
+        $html .= '</div>';
+    }
+} else {
+    $html = '<p>No images found.</p>';
+}
+
+// Close the database connection
+$conn->close();
+?>
 
 <html lang="en">
 <head>
@@ -8,6 +44,25 @@
     <link rel="shortcut icon" href="images/logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://kit.fontawesome.com/f0fb58e769.js" crossorigin="anonymous"></script>
+    <style>
+        div{
+           opacity: 0;
+           transform: translateY(20px);
+           transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+         }
+
+         div.visible {
+           opacity: 1;
+           transform: translateY(0);
+       }
+       @media screen and (max-width:700px) {
+    
+    .container{
+            position:absolute;
+            top:-70px;
+           }
+    }
+   </style>
 </head>
 <body>
   <header>
@@ -139,7 +194,9 @@
     <div id="Gallery">
         <h3>Photo Gallery</h3>
  
- 
+        <div class="image-gallery" style="display: flex; flex-direction: row; flex-wrap: wrap;justify-content:space-around">
+    <?php echo $html; ?>
+</div>
          </div>
    </main>
    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#128354" fill-opacity="1" d="M0,224L60,218.7C120,213,240,203,360,208C480,213,600,235,720,256C840,277,960,299,1080,282.7C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
@@ -155,8 +212,7 @@
           <p><b> <i class="fa fa-map-marker" style=" font-size:20px;color:#2CB67D;padding-right: 10px"></i>Farm:</b>o. 24 APA mini Street Off Y Junction,
             Miniorlu Ada-George.                                                                                                                             
           </p>
-          <p><b> <i class="fa fa-map-marker" style=" font-size:20px;color:#2CB67D;padding-right: 10px"></i>Office:</b> Castel Resources No. 99 Olu-Obasanjo
-            New Phrase 1, Port Harcourt, Rivers State.
+          <p><b> <i class="fa fa-map-marker" style=" font-size:20px;color:#2CB67D;padding-right: 10px"></i>Office:</b>  13 Rumuodaolu Market Road, Off Rumuola Road, Port Port-Harcourt
                                                                                                                                        
           </p>
           <p><b><i class="fa fa-phone" style="font-size:15px;color:#2CB67D;padding-right: 10px;"></i>Telephone:</b> 07042715386, 08069902316
@@ -192,5 +248,40 @@
       </div>
       </div>
     </footer>
+    <script src="index.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+  const sections = document.querySelectorAll('div');
+
+  const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+          if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+          } else {
+              entry.target.classList.remove('visible');
+          }
+      });
+  }, {
+      threshold: 0.1
+  });
+
+  sections.forEach(section => {
+      observer.observe(section);
+  });
+});
+    </script>
+    <!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/66584e7a9a809f19fb36e559/1hv4f578f';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
 </body>
 </html>
